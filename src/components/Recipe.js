@@ -1,10 +1,14 @@
 import React from 'react';
 
-const Recipe = () =>{
-
+const Recipe = (props) =>{
+    const title = props.title;
+    const image = props.image;
+    const used = props.used;
+    const unused = props.unused;
     return(
         <div>
-            <p>Recipe</p>
+            <img src={image}></img>
+            <h1>{title}</h1>
         </div>
     );
 }
