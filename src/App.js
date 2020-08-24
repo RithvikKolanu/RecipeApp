@@ -7,7 +7,7 @@ function App() {
   //variables
   const [form, setForm] = useState("");
   const [header, setHeader] = useState("");
-  const [recipes, setRecipes] = useState(0);
+  const [recipes, setRecipes] = useState([]);
   const lists = [];         
  
   //updating the search values
@@ -26,18 +26,28 @@ function App() {
     getRecipes();
   }, [])
 
-   const getRecipes = async () =>{
-    const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=chicken&number=5&apiKey=4934c99bf5024925b8c622925cde396d`);
+  const getRecipes = async () =>{
+    const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=chicken&number=6&apiKey=4934c99bf5024925b8c622925cde396d`);
     const recipedata = await response.json();
     console.log(recipedata);
     setRecipes(recipedata);
+    
   }
-    const formatting = () =>{
+  //formatting the data into recipe component
+  const formatting = () =>{
     Object.keys(recipes).map(function(key, index)
     {
-        lists.push(<Recipe title={recipes[key].title} image={recipes[key].image} />)
-    }
-    )}
+      const usedingredient = recipes[key].usedIngredients
+      const unusedingredient = recipes[key].unusedIngredients
+      const missedingredient = recipes[key].missedIngredients
+      lists.push(<Recipe title={recipes[key].title} image={recipes[key].image} 
+        used = {usedingredient.map(function(key, index){const container = []; container.push(usedingredient[index].name + ', '); return container})}
+        unused = {unusedingredient.map(function(key, index){const container2 = []; container2.push(unusedingredient[index].name + ', '); return container2})}
+        missed = {missedingredient.map(function(key, index){const container3 = []; container3.push(missedingredient[index].name + ', '); return container3})}
+      />)
+    }  
+  )}
+
   return (
     <div className="App">
       <h1>Results for {header}</h1>
