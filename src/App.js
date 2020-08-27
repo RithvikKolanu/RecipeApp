@@ -5,29 +5,31 @@ import Recipe from './components/Recipe.js';
 
 function App() {
   //variables
-  const [form, setForm] = useState("");
-  const [header, setHeader] = useState("");
+  const [search, setSearch] = useState("");
+  const [result, setResult] = useState("chicken");
   const [recipes, setRecipes] = useState([]);
   const lists = [];         
  
   //updating the search values
   const updateSearch = e =>{
-    setForm(e.target.value);
-    console.log(form);
+    setSearch(e.target.value);
+    console.log(search);
   }
   //updating the final search value
-  const updateHeader = e =>{
+  const updateResult = e =>{
     e.preventDefault();
-    setHeader(form);
-    console.log(header);
+    setResult(search);
+    console.log(result);
   }
-  //calling the recipes from the api
+
+  //calling the recipe function everytime the search query is updated
   useEffect(()=>{
     getRecipes();
-  }, [])
+  }, [result])
 
+  //calling recipe data from api
   const getRecipes = async () =>{
-    const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=chicken&number=6&apiKey=4934c99bf5024925b8c622925cde396d`);
+    const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${result}&number=6&apiKey=4934c99bf5024925b8c622925cde396d`);
     const recipedata = await response.json();
     console.log(recipedata);
     setRecipes(recipedata);
@@ -50,9 +52,9 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Results for {header}</h1>
-      <form className="searchForm" onSubmit={updateHeader}>
-        <input className="searchField" type='text' value={form} onChange={updateSearch}></input>
+      <h1>Results for {result}</h1>
+      <form className="searchForm" onSubmit={updateResult}>
+        <input className="searchField" type='text' value={search} onChange={updateSearch}></input>
         <button className="submitButton" type='submit'>Search</button>
       </form>
       <div>
