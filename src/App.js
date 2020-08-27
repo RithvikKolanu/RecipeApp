@@ -6,9 +6,10 @@ import Recipe from './components/Recipe.js';
 function App() {
   //variables
   const [search, setSearch] = useState("");
-  const [result, setResult] = useState("chicken");
+  const [result, setResult] = useState("");
   const [recipes, setRecipes] = useState([]);
   const lists = [];         
+  const [quantity, setQuantity] = useState(6);
  
   //updating the search values
   const updateSearch = e =>{
@@ -25,11 +26,11 @@ function App() {
   //calling the recipe function everytime the search query is updated
   useEffect(()=>{
     getRecipes();
-  }, [result])
+  }, [result, quantity])
 
   //calling recipe data from api
   const getRecipes = async () =>{
-    const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${result}&number=6&apiKey=4934c99bf5024925b8c622925cde396d`);
+    const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${result}&number=${quantity}&ranking=2&apiKey=4934c99bf5024925b8c622925cde396d`);
     const recipedata = await response.json();
     console.log(recipedata);
     setRecipes(recipedata);
@@ -50,6 +51,11 @@ function App() {
     }  
   )}
 
+  const changeQuantity = e =>{
+    e.preventDefault(); 
+    setQuantity(quantity + 6)
+  }
+
   return (
     <div className="App">
       <h1>Results for {result}</h1>
@@ -61,6 +67,10 @@ function App() {
         {formatting()}
         {lists}
       </div>
+      <form className = "loadmoreform" onSubmit={changeQuantity}>
+        <h1>{quantity}</h1>
+        <button className="loadmore" type="submit">Load more</button>
+      </form>
     </div>
   );
 }
