@@ -16,12 +16,25 @@ function Recipeinfo({ match }){
 
     const ingredientslist = [];
     const ingredientslistformatting = () =>{
-        console.log(information.extendedIngredients)
         if (information.extendedIngredients){
             Object.keys(information.extendedIngredients).map(function(keys, index){
                 ingredientslist.push(<li>{information.extendedIngredients[index].original}</li>)
             })
         }
+    }
+    const recipesteps = [];
+    const recipestepsformatting = () =>{
+        if (information.instructions){
+            if (information.analyzedInstructions){
+                console.log(information.analyzedInstructions[0].steps[0])
+                Object.keys(information.analyzedInstructions[0].steps).map(function(index, keys){
+                    recipesteps.push(<li>{information.analyzedInstructions[0].steps[index].step}</li>);
+                })
+            } else{
+                console.log('error')
+            }
+        }
+
     }
     return(
         <div>
@@ -36,10 +49,15 @@ function Recipeinfo({ match }){
             <ul>
                 <li>Prep Time: {JSON.stringify(information.preparationMinutes)} minutes</li>
                 <li>Cook Time: {JSON.stringify(information.cookingMinutes)} minutes</li>
+                <li>Servings: {JSON.stringify(information.servings)}</li>
             </ul>
             <ul>
                 {ingredientslistformatting()}
                 {ingredientslist}
+            </ul>
+            <ul>
+                {recipestepsformatting()}
+                {recipesteps}
             </ul>
         </div>
     );
